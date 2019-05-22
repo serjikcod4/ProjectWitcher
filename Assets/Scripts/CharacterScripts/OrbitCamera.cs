@@ -5,7 +5,7 @@ using UnityEngine;
 public class OrbitCamera : MonoBehaviour
 {
     //Сериализованное поле для ссылки на игрока.
-    [SerializeField] private Transform Player;
+    [SerializeField] private GameObject Player;
 
     [SerializeField] private float CameraMinDistance = 5.0f;
 
@@ -47,34 +47,22 @@ public class OrbitCamera : MonoBehaviour
             Offset.z = Mathf.Clamp(Offset.z, CameraMinDistance, CameraMaxDistance);
         }
 
-        //Если клавиша была нажата:
-        if (horInput != 0)
-        {
-            //Угол поворота камеры по оси Y равен направлению поворота (1\-1) умноженному на скорость вращения
-            //Меняем угол поворота камеры.
-            RotationY += horInput * RotationSpeed;
-        }
-
-        //Если клавиша не была нажата, то считываем движения по горизонтальной оси мыши.
-        else
-        {
-            //Угол поворота камеры по оси Y равен направлению поворота (1\-1) умноженному на скорость вращения и на 3
-            //Скорость вращения камеры мышью больше.
-            RotationY += Input.GetAxis("Mouse X") * (RotationSpeed * 3);
-            RotationX += -Input.GetAxis("Mouse Y") * (RotationSpeed * 3);
+        //Угол поворота камеры по оси Y равен направлению поворота (1\-1) умноженному на скорость вращения и на 3
+        //Скорость вращения камеры мышью больше.
+        RotationY += Input.GetAxis("Mouse X") * (RotationSpeed * 3);
+        RotationX += -Input.GetAxis("Mouse Y") * (RotationSpeed * 3);
 
 
-            //Ограничиваем движение камеры
-            RotationX = Mathf.Clamp(RotationX, 0, 70);
-        }
+        //Ограничиваем движение камеры
+        RotationX = Mathf.Clamp(RotationX, 0, 70);
 
         //Преобразуем угол Еулера по оси Y в кватернион.
         Quaternion rotation = Quaternion.Euler(RotationX, RotationY, 0);
 
         //Задаем позицию камеры как Vector3 игрока минус оффсет умноженное угол вращения.
-        transform.position = Player.position - (rotation * Offset);
+        transform.position = Player.transform.position - (rotation * Offset);
 
         //Камера все время повернута в сторону игрока.
-        transform.LookAt(Player);
+        transform.LookAt(Player.transform);
     }
 }

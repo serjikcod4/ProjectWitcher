@@ -47,8 +47,8 @@ public class MovementController : MonoBehaviour
         //Флаг бега персонажа
         _isRunning = Input.GetKey(runButton) && unit.CanRun;
 
-        // Check to see if the A or S key are being pressed
-        var x = Input.GetAxis("Horizontal");
+        // Check to see if the A or D key are being pressed
+        var x = Input.GetAxis("Horizontal") * (_isRunning ? runSpeed : speed);
 
         // Check to see if the W or S key is being pressed.  
         var z = Input.GetAxis("Vertical") * (_isRunning ? runSpeed : speed);
@@ -88,9 +88,12 @@ public class MovementController : MonoBehaviour
 
             //Создаем кватернион направления движения, метод LookRotation() вычисляет кватернион который смотрит в направлении движения.
             Quaternion Direction = Quaternion.LookRotation(Movement);
-            
+
             //Вращаем персонажа
             transform.rotation = Quaternion.Lerp(transform.rotation, Direction, rotateSpeed * Time.deltaTime);
+
+            //Двигаем персонажа
+            _controller.Move(Movement * Time.deltaTime);
         }
 
         //Если на персонаж на поверхности, то имитируем силу тяжести.
@@ -98,8 +101,5 @@ public class MovementController : MonoBehaviour
         {
             _controller.SimpleMove(_controller.velocity +  Vector3.down*gravity * Time.deltaTime);
         }
-
-        //Двигаем персонажа
-        _controller.Move(Movement * Time.deltaTime);
     }
 }
