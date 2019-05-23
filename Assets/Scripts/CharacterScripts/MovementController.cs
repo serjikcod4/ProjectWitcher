@@ -15,9 +15,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float runSpeed = 10f;
 
     [SerializeField] private float rotateSpeed = 15f;
-
-    [SerializeField] private float mouseSensivity = 4f;
-
+    
     [SerializeField] private KeyCode runButton = KeyCode.LeftShift;
 
     [SerializeField] private float walkStaminaDrain = 0.1f;
@@ -42,7 +40,6 @@ public class MovementController : MonoBehaviour
 
     void Update()
     {
-
         //Нулевой вектор.
         Movement = Vector3.zero;
 
@@ -58,52 +55,54 @@ public class MovementController : MonoBehaviour
         if (Math.Abs(z) > float.Epsilon)
             // Mock for Stamina Drain
             unit.DrainStamina(_isRunning ? runStaminaDrain : walkStaminaDrain);
-
-        // Check to see if the right mouse button is pressed
-        if (Input.GetMouseButton(1))
-        {
-            // Get the difference in horizontal mouse movement
-            x = Input.GetAxis("Mouse X") * mouseSensivity;
-        }
-
-
+        
         //Если были нажаты клавиши то:
         if (z != 0 || x != 0)
         {
-            //Добавляем скорость движения. Изменяем положение по осям x и z вектора3 + учитываем скорость.
-            Movement.x = x;
-            Movement.z = z;
-
-            //Ограничиваем скорость движения по диагонали.
-            Movement = Vector3.ClampMagnitude(Movement, runSpeed);
-
-            //Кватернион для сохранения текущего вращения камеры.
-            Quaternion TempCameraRotation = Camera.rotation;
-
-            //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
-            Camera.eulerAngles = new Vector3(0, Camera.eulerAngles.y, 0);
-
-            //Переводим локальные координаты вектора движения игрока в глобальные.
-            Movement = Camera.TransformDirection(Movement);
-
-            //Возвращаем поворот камеры.
-            Camera.rotation = TempCameraRotation;
-
-            //Создаем кватернион направления движения, метод LookRotation() вычисляет кватернион который смотрит в направлении движения.
-            Quaternion Direction = Quaternion.LookRotation(Movement);
-
-            //Вращаем персонажа
-            transform.rotation = Quaternion.Lerp(transform.rotation, Direction, rotateSpeed * Time.deltaTime);
-
-            //Двигаем персонажа
-            _controller.Move(Movement * Time.deltaTime);
+            CharacterMovement(Movement, x, z);
         }
 
-        //Если на персонаж на поверхности, то имитируем силу тяжести.
-
+        //Если персонаж стоит на поверхности, то имитируем силу тяжести.
         if (!_controller.isGrounded)
         {
             _controller.SimpleMove(_controller.velocity + Vector3.down * gravity * Time.deltaTime);
         }
+    }
+
+    /// <summary>
+    /// Метод движения персонажа
+    /// </summary>
+    /// <param name="Movement">Вектор движения</param>
+    /// <param name="AxisX">Направление по оси X</param>
+    /// <param name="AxisZ">Направление по оси Z</param>
+    private void CharacterMovement(Vector3 Movement, float AxisX, float AxisZ)
+    {
+        //Добавляем скорость движения. Изменяем положение по осям x и z вектора3.
+        Movement.x = AxisX;
+        Movement.z = AxisZ;
+
+        //Ограничиваем скорость движения по диагонали.
+        Movement = Vector3.ClampMagnitude(Movement, runSpeed);
+
+        //Кватернион для сохранения текущего вращения камеры.
+        Quaternion TempCameraRotation = Camera.rotation;
+
+        //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
+        Camera.eulerAngles = new Vector3(0, Camera.eulerAngles.y, 0);
+
+        //Переводим локальные координаты вектора движения игрока в глобальные.
+        Movement = Camera.TransformDirection(Movement);
+
+        //Возвращаем поворот камеры.
+        Camera.rotation = TempCameraRotation;
+
+        //Создаем кватернион направления движения, метод LookRotation() вычисляет кватернион который смотрит в направлении движения.
+        Quaternion Direction = Quaternion.LookRotation(Movement);
+
+        //Вращаем персонажа
+        transform.rotation = Quaternion.Lerp(transform.rotation, Direction, rotateSpeed * Time.deltaTime);
+
+        //Двигаем персонажа
+        _controller.Move(Movement * Time.deltaTime);
     }
 }

@@ -13,8 +13,10 @@ public class OrbitCamera : MonoBehaviour
 
     [SerializeField] private float CameraZoomSpeed = 300f;
 
-    //Переменная для регулирования скорости вращения камеры.
-    private float RotationSpeed = 3f;
+    [SerializeField] private float AxisX_MouseSensivity = 3f;
+
+    [SerializeField] private float AxisY_MouseSensivity = 3f;
+
     //Угол вращения камеры по оси Y.
     private float RotationY;
     //Угол вращения камеры по оси X.
@@ -33,9 +35,6 @@ public class OrbitCamera : MonoBehaviour
     
     void LateUpdate()
     {
-        //Переменная в которую передаются данные о нажатых клавишах с горизонт стрелками(1\-1 = в зависимости от направления)
-        float horInput = Input.GetAxis("Horizontal");
-
         float Zoom = Input.GetAxis("Mouse ScrollWheel");
         
         //Управление зумом камеры.
@@ -46,13 +45,10 @@ public class OrbitCamera : MonoBehaviour
             //Ограничиваем приближение\отдаление камеры.
             Offset.z = Mathf.Clamp(Offset.z, CameraMinDistance, CameraMaxDistance);
         }
-
-        //Угол поворота камеры по оси Y равен направлению поворота (1\-1) умноженному на скорость вращения и на 3
-        //Скорость вращения камеры мышью больше.
-        RotationY += Input.GetAxis("Mouse X") * (RotationSpeed * 3);
-        RotationX += -Input.GetAxis("Mouse Y") * (RotationSpeed * 3);
-
-
+        
+        RotationY += Input.GetAxis("Mouse X") * (AxisX_MouseSensivity * 2);
+        RotationX += -Input.GetAxis("Mouse Y") * (AxisY_MouseSensivity * 2);
+        
         //Ограничиваем движение камеры
         RotationX = Mathf.Clamp(RotationX, 0, 70);
 
