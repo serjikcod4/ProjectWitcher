@@ -1,16 +1,30 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections;
 using System.Collections.Generic;
+=======
+>>>>>>> origin/master
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
+<<<<<<< HEAD
     private CharacterController _controller;
     
     //Камера игрока
     [SerializeField] private Transform Camera;
 
     [SerializeField] private float speed = 5f;
+=======
+    protected CharacterController _controller;
+    
+    //Камера игрока
+    [SerializeField] private Transform mainCamera;
+
+    [SerializeField] protected float jumpSpeed = 8.0f;
+
+    [SerializeField] protected float speed = 5f;
+>>>>>>> origin/master
 
     [SerializeField] private float runSpeed = 10f;
     
@@ -20,20 +34,35 @@ public class MovementController : MonoBehaviour
     
     [SerializeField] private KeyCode runButton = KeyCode.LeftShift;
 
+<<<<<<< HEAD
     [SerializeField] private float gravity = -9.81f;
+=======
+    [SerializeField] private float walkStaminaDrain = 0.1f;
+
+    [SerializeField] private float runStaminaDrain = 0.3f;
+
+    [SerializeField] protected float gravity = -9.81f;
+>>>>>>> origin/master
     
     private bool _isRunning = false;
     private bool _isGrounded = false;
     private bool _isStanding = true;
     
+<<<<<<< HEAD
     //Mock for unit data model
     private Unit unit = new Unit();
     
+=======
+>>>>>>> origin/master
     //Вектор движения персонажа.
     private Vector3 Movement = Vector3.zero;
 
     void Start()
     {
+<<<<<<< HEAD
+=======
+        mainCamera = Camera.main.transform;
+>>>>>>> origin/master
        _controller =  gameObject.GetComponent<CharacterController>();
     }
 
@@ -42,7 +71,11 @@ public class MovementController : MonoBehaviour
         //Нулевой вектор.
         Movement = Vector3.zero;
 
+<<<<<<< HEAD
         _isRunning = Input.GetKey(runButton) && unit.StaminaChekForRun();
+=======
+        _isRunning = Input.GetKey(runButton) && Unit.InstanceUnit.StaminaChekForRun();
+>>>>>>> origin/master
         
         // Check to see if the A or D key are being pressed
         var x = Input.GetAxis("Horizontal") * (_isRunning ? runSpeed : speed);
@@ -54,7 +87,11 @@ public class MovementController : MonoBehaviour
             // Mock for Stamina Drain
             if (_isRunning)
             {
+<<<<<<< HEAD
                 unit.DrainStamina();
+=======
+                Unit.InstanceUnit.DrainStamina();
+>>>>>>> origin/master
             }
 
         //Если были нажаты клавиши то:
@@ -63,7 +100,11 @@ public class MovementController : MonoBehaviour
             CharacterMovement(Movement, x, z);
         }
 
+<<<<<<< HEAD
         //Если персонаж стоит на поверхности, то имитируем силу тяжести.
+=======
+        //Если персонаж находится в воздухе, то имитируем силу тяжести.
+>>>>>>> origin/master
         if (!_controller.isGrounded)
         {
             _controller.SimpleMove(_controller.velocity + Vector3.down * gravity * Time.deltaTime);
@@ -86,6 +127,7 @@ public class MovementController : MonoBehaviour
         Movement = Vector3.ClampMagnitude(Movement, runSpeed);
 
         //Кватернион для сохранения текущего вращения камеры.
+<<<<<<< HEAD
         Quaternion TempCameraRotation = Camera.rotation;
 
         //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
@@ -96,6 +138,18 @@ public class MovementController : MonoBehaviour
 
         //Возвращаем поворот камеры.
         Camera.rotation = TempCameraRotation;
+=======
+        Quaternion TempCameraRotation = mainCamera.rotation;
+
+        //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
+        mainCamera.eulerAngles = new Vector3(0, mainCamera.eulerAngles.y, 0);
+
+        //Переводим локальные координаты вектора движения игрока в глобальные.
+        Movement = mainCamera.TransformDirection(Movement);
+
+        //Возвращаем поворот камеры.
+        mainCamera.rotation = TempCameraRotation;
+>>>>>>> origin/master
 
         //Создаем кватернион направления движения, метод LookRotation() вычисляет кватернион который смотрит в направлении движения.
         Quaternion Direction = Quaternion.LookRotation(Movement);
