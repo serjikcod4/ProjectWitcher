@@ -36,19 +36,24 @@ public class StaminaUsing : MonoBehaviour
         StaminaRegeneration();
 
 
-        if (!_isRunning )
-        {
-            _isRegeneration = true;
-        }
-        else
-        {
-            _isRegeneration = false;
-        }
+        //if (!_isRunning )
+        //{
+        //    _isRegeneration = true;
+        //}
+        //else
+        //{
+        //    _isRegeneration = false;
+        //}
         
 
         if (_isRunning)
         {
             StaminaSpendingForRun();
+            _isRegeneration = false;
+        }
+        else
+        {
+            _isRegeneration = true;
         }
         
     }

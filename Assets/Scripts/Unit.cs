@@ -54,9 +54,9 @@ public class Unit: MonoBehaviour
     // для MovementController проверка на остаток стамины
 
     public bool StaminaChekForRun()
-    {
-        if (_stamina >= 1) return true;
-        else return false;
+    { 
+       if (_stamina >= 1) return true;
+       else return false;
     }
 
     // проверка нажата ли кнопка бега(и др. состояний) в MovementController
@@ -98,10 +98,7 @@ public class Unit: MonoBehaviour
         #endregion
     }
 
-    private void Start()
-    {
-        
-    }
+
 
     private void Update()
     {
@@ -110,6 +107,9 @@ public class Unit: MonoBehaviour
         StaminaShow();
         MovementStatusCheck();
         StaminaRegeneration();
+        
+
+
 
 
         if (!_isRunning)

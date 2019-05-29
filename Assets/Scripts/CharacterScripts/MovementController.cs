@@ -1,69 +1,51 @@
 ﻿using System;
-<<<<<<< HEAD
-using System.Collections;
-using System.Collections.Generic;
-=======
->>>>>>> origin/master
 using UnityEngine;
+
 
 public class MovementController : MonoBehaviour
 {
-<<<<<<< HEAD
-    private CharacterController _controller;
-    
-    //Камера игрока
-    [SerializeField] private Transform Camera;
-
-    [SerializeField] private float speed = 5f;
-=======
     protected CharacterController _controller;
-    
+
     //Камера игрока
     [SerializeField] private Transform mainCamera;
 
     [SerializeField] protected float jumpSpeed = 8.0f;
 
     [SerializeField] protected float speed = 5f;
->>>>>>> origin/master
 
     [SerializeField] private float runSpeed = 10f;
-    
+
     [SerializeField] private float rotateSpeed = 15f;
-    
+
     [SerializeField] private float mouseSensivity = 4f;
-    
+
     [SerializeField] private KeyCode runButton = KeyCode.LeftShift;
 
-<<<<<<< HEAD
-    [SerializeField] private float gravity = -9.81f;
-=======
     [SerializeField] private float walkStaminaDrain = 0.1f;
 
     [SerializeField] private float runStaminaDrain = 0.3f;
 
     [SerializeField] protected float gravity = -9.81f;
->>>>>>> origin/master
-    
+
+    [SerializeField] private UnitModel _unitModel;
+
+    [SerializeField] private float x;
+    [SerializeField] private float z;
+
     private bool _isRunning = false;
     private bool _isGrounded = false;
     private bool _isStanding = true;
-    
-<<<<<<< HEAD
-    //Mock for unit data model
-    private Unit unit = new Unit();
-    
-=======
->>>>>>> origin/master
+
     //Вектор движения персонажа.
     private Vector3 Movement = Vector3.zero;
-
+    private void Awake()
+    {
+        _unitModel = GameObject.FindGameObjectWithTag("Player").GetComponent<UnitModel>();
+    }
     void Start()
     {
-<<<<<<< HEAD
-=======
         mainCamera = Camera.main.transform;
->>>>>>> origin/master
-       _controller =  gameObject.GetComponent<CharacterController>();
+        _controller = gameObject.GetComponent<CharacterController>();
     }
 
     void Update()
@@ -71,43 +53,46 @@ public class MovementController : MonoBehaviour
         //Нулевой вектор.
         Movement = Vector3.zero;
 
-<<<<<<< HEAD
-        _isRunning = Input.GetKey(runButton) && unit.StaminaChekForRun();
-=======
-        _isRunning = Input.GetKey(runButton) && Unit.InstanceUnit.StaminaChekForRun();
->>>>>>> origin/master
-        
+        _isRunning = Input.GetKey(runButton) & _unitModel._canRun == true;
+
         // Check to see if the A or D key are being pressed
-        var x = Input.GetAxis("Horizontal") * (_isRunning ? runSpeed : speed);
+        x = Input.GetAxis("Horizontal") * (_isRunning ? runSpeed : speed);
 
         // Check to see if the W or S key is being pressed.  
-        var z = Input.GetAxis("Vertical") * (_isRunning ? runSpeed : speed);
+        z = Input.GetAxis("Vertical") * (_isRunning ? runSpeed : speed);
 
-        if (Math.Abs(z) > float.Epsilon)
-            // Mock for Stamina Drain
-            if (_isRunning)
-            {
-<<<<<<< HEAD
-                unit.DrainStamina();
-=======
-                Unit.InstanceUnit.DrainStamina();
->>>>>>> origin/master
-            }
 
         //Если были нажаты клавиши то:
         if (z != 0 || x != 0)
         {
             CharacterMovement(Movement, x, z);
+            // проверка на бег
+            if (_isRunning)
+            {
+                Debug.Log("run");
+                _unitModel.ChangeMoveState(2);
+            }
+            // шаг
+            else
+            {
+                Debug.Log("walk");
+                _unitModel.ChangeMoveState(1);
+            }
+        }
+        // стоит
+        else
+        {
+            Debug.Log("stand");
+            _unitModel.ChangeMoveState(0);
         }
 
-<<<<<<< HEAD
-        //Если персонаж стоит на поверхности, то имитируем силу тяжести.
-=======
+
         //Если персонаж находится в воздухе, то имитируем силу тяжести.
->>>>>>> origin/master
         if (!_controller.isGrounded)
         {
             _controller.SimpleMove(_controller.velocity + Vector3.down * gravity * Time.deltaTime);
+            //Debug.Log("jump");
+            //_unitModel.ChangeMoveState(4);
         }
     }
 
@@ -127,18 +112,6 @@ public class MovementController : MonoBehaviour
         Movement = Vector3.ClampMagnitude(Movement, runSpeed);
 
         //Кватернион для сохранения текущего вращения камеры.
-<<<<<<< HEAD
-        Quaternion TempCameraRotation = Camera.rotation;
-
-        //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
-        Camera.eulerAngles = new Vector3(0, Camera.eulerAngles.y, 0);
-
-        //Переводим локальные координаты вектора движения игрока в глобальные.
-        Movement = Camera.TransformDirection(Movement);
-
-        //Возвращаем поворот камеры.
-        Camera.rotation = TempCameraRotation;
-=======
         Quaternion TempCameraRotation = mainCamera.rotation;
 
         //Задаем угол Эулера для камеры как координату оси Y, z и x оставляем 0.
@@ -149,7 +122,6 @@ public class MovementController : MonoBehaviour
 
         //Возвращаем поворот камеры.
         mainCamera.rotation = TempCameraRotation;
->>>>>>> origin/master
 
         //Создаем кватернион направления движения, метод LookRotation() вычисляет кватернион который смотрит в направлении движения.
         Quaternion Direction = Quaternion.LookRotation(Movement);
@@ -178,4 +150,5 @@ public class MovementController : MonoBehaviour
     {
         return _isStanding;
     }
+
 }

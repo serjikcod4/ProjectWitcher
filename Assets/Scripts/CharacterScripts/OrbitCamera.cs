@@ -15,13 +15,10 @@ public class OrbitCamera : MonoBehaviour
 
     [SerializeField] private float AxisY_MouseSensivity = 3f;
 
-<<<<<<< HEAD
-=======
     [SerializeField] public float CameraObstacleAvoidSpeed = 5;
 
     [SerializeField] public float CameraReturnSpeed = 10;
 
->>>>>>> origin/master
     //Угол вращения камеры по оси Y.
     private float RotationY = 0;
 
@@ -34,15 +31,6 @@ public class OrbitCamera : MonoBehaviour
     //Вектор расстояния между игроком и камерой.
     private Vector3 Offset;
 
-<<<<<<< HEAD
-    void Start()
-    {
-        //Присваимем переменной угол по оси y;
-        RotationY = transform.eulerAngles.y;
-
-        //Вычисляем расстояние между камерой и игроком.
-        Offset = Player.transform.position - transform.position;
-=======
     //Расстояние до камеры с препятствием.
     private Vector3 ObstacleOffset;
 
@@ -64,26 +52,16 @@ public class OrbitCamera : MonoBehaviour
 
         //Задаем начальное расстояние.
         Offset = Player.transform.position - StartCameraDistance;
->>>>>>> origin/master
     }
 
     void LateUpdate()
     {
-<<<<<<< HEAD
-        float Zoom = Input.GetAxis("Mouse ScrollWheel");
-
-        //Управление зумом камеры.
-        if (Zoom != 0)
-        {
-            Offset.z -= (1 * Input.GetAxis("Mouse ScrollWheel")) * CameraZoomSpeed * Time.deltaTime;
-=======
         //Получаем значения колесика мыши
         Zoom = Input.GetAxis("Mouse ScrollWheel");
 
         //Получаем значения движения мыши по осям X и Y
         RotationY += Input.GetAxis("Mouse X") * (AxisX_MouseSensivity * 2);
         RotationX += -Input.GetAxis("Mouse Y") * (AxisY_MouseSensivity * 2);
->>>>>>> origin/master
 
         //Ограничиваем движение камеры по оси X
         RotationX = Mathf.Clamp(RotationX, 0, 70);
@@ -91,13 +69,6 @@ public class OrbitCamera : MonoBehaviour
         //Преобразуем угол Еулера в кватернион.
         Quaternion Rotation = Quaternion.Euler(RotationX, RotationY, 0);
 
-<<<<<<< HEAD
-        RotationY += Input.GetAxis("Mouse X") * (AxisX_MouseSensivity * 2);
-        RotationX += -Input.GetAxis("Mouse Y") * (AxisY_MouseSensivity * 2);
-
-        //Ограничиваем движение камеры
-        RotationX = Mathf.Clamp(RotationX, 0, 70);
-=======
         //Проверяем коллизию
         CollisionCheck(Player.transform.position, Rotation);
 
@@ -124,7 +95,7 @@ public class OrbitCamera : MonoBehaviour
             case false:
 
                 transform.position = Vector3.Lerp(transform.position, Player.transform.position - (Rotation * Offset), CameraReturnSpeed * Time.deltaTime);
-                
+
                 //Управляем зумом
                 CameraZoom(CameraMinDistance, CameraMaxDistance);
                 break;
@@ -139,7 +110,7 @@ public class OrbitCamera : MonoBehaviour
     private void CollisionCheck(Vector3 PlayerPosition, Quaternion rotation)
     {
         RaycastHit Ray;
-        
+
         Debug.DrawLine(PlayerPosition, (PlayerPosition - (rotation * Offset)), Color.yellow);
 
         //Проверяем столкновение луча с препятствием
@@ -153,18 +124,10 @@ public class OrbitCamera : MonoBehaviour
 
             return;
         }
->>>>>>> origin/master
 
         CameraObstacle = false;
     }
 
-<<<<<<< HEAD
-        //Задаем позицию камеры как Vector3 игрока минус оффсет умноженное угол вращения.
-        transform.position = Player.transform.position - (rotation * Offset);
-
-        //Камера все время повернута в сторону игрока.
-        transform.LookAt(Player.transform);
-=======
     /// <summary>
     /// Метод "зума" камеры
     /// </summary>
@@ -180,6 +143,5 @@ public class OrbitCamera : MonoBehaviour
             //Ограничиваем приближение\отдаление камеры.
             Offset.z = Mathf.Clamp(Offset.z, MinDistance, MaxDistance);
         }
->>>>>>> origin/master
     }
 }
