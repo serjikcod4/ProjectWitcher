@@ -616,9 +616,9 @@ GameObject:
   - component: {fileID: 1769422357}
   - component: {fileID: 1769422356}
   - component: {fileID: 1769422355}
-  - component: {fileID: 1769422359}
   - component: {fileID: 1769422360}
   - component: {fileID: 1769422361}
+  - component: {fileID: 1769422362}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Player
@@ -700,31 +700,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1769422359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1769422354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0259ec3c11205d6488df6c6c01a0f717, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  jumpSpeed: 8
-  speed: 5
-  runSpeed: 10
-  rotateSpeed: 15
-  mouseSensivity: 4
-  runButton: 304
-  walkStaminaDrain: 0.1
-  runStaminaDrain: 0.3
-  gravity: -9.81
-  _unitModel: {fileID: 0}
-  x: 0
-  z: 0
 --- !u!143 &1769422360
 CharacterController:
   m_ObjectHideFlags: 0
@@ -776,6 +751,31 @@ MonoBehaviour:
   _canSit: 0
   _canStand: 1
   _isDead: 0
+--- !u!114 &1769422362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769422354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638f5eb743822c744aeddce7d83803db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  jumpSpeed: 8
+  speed: 5
+  runSpeed: 10
+  rotateSpeed: 15
+  mouseSensivity: 4
+  runButton: 304
+  walkStaminaDrain: 0.1
+  runStaminaDrain: 0.3
+  gravity: -9.81
+  _unitModel: {fileID: 0}
+  x: 0
+  z: 0
 --- !u!1 &1826336846
 GameObject:
   m_ObjectHideFlags: 0
