@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.BaseScripts;
 using Assets.Scripts.Models;
+using Assets.Scripts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,5 +173,7 @@ namespace Assets.Scripts.Controllers
                 Stamina -= staminaModel.StaminaHeavyAttackCoast;
             }
         }
+
+        
     }
 }
