@@ -6,38 +6,55 @@ using Assets.Scripts.Interfaces;
 
 namespace Assets.Scripts.Controllers
 {
-    public class EnemyAttackController : MonoBehaviour
+
+    public class EnemyAttackController : BaseController
     {
-        
-        private bool IsHit;
         private float damage = 10;
-        
+        private Collider target;
+        TargetDetector targetDetector;
 
-        
-
-        private void OnTriggerEnter(Collider collider)
+        public EnemyAttackController(TargetDetector targetDetector)
         {
-            Debug.Log($"{collider} entered");
-            IDamageable target = collider.GetComponent<IDamageable>();
-            if (target != null)
+            this.targetDetector = targetDetector;
+        }
+
+
+
+
+        private void AttackTarget()
+        {
+            target = targetDetector.target;
+
+            if (target == null)
             {
-                Debug.Log($"Attack => {collider}");
-                IsHit = true;
-                target.TakeDamage(damage);
+                return;
             }
-            else
+            else if (target.tag == "Player")
             {
-                IsHit = false;
+
+                Debug.Log($"target  attack {target}");
+
+                IDamageable d = target.GetComponent<IDamageable>();
+                if (d != null)
+                {
+                    d.TakeDamage(damage);
+                }
+                
+
             }
         }
 
 
 
-        //public override void ControllerUpdate()
-        //{
-
-        //}
+        public override void ControllerUpdate()
+        {
+            AttackTarget();
+        }
 
 
     }
+
+
+
+
 }
