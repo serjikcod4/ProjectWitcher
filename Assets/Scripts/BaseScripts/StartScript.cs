@@ -23,11 +23,7 @@ namespace Assets.Scripts.BaseScripts
 
         public AnimController animController { get; private set; }
 
-        public EnemyAttackController enemyAttackController { get; private set; }
-
         private List<BaseController> AllControllers = new List<BaseController>(6);
-
-        
 
         #endregion
 
@@ -38,16 +34,15 @@ namespace Assets.Scripts.BaseScripts
             GetStartScript = this;
 
             GameObject Player = GameObject.FindGameObjectWithTag("Player");
-            GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
             Transform CameraCenter = GameObject.FindGameObjectWithTag("CameraCenter").transform;
+            GameObject PlayerAnimator = GameObject.FindGameObjectWithTag("PlayerAnimator");
 
             //Создаем контроллеры
             inputController = new PCInputController();
             cameraController = new CameraController(Camera.main.GetComponent<CameraModel>(), CameraCenter, Camera.main, inputController);
             movementController = new MovementController(Player.transform, Player.GetComponent<CharacterController>());
             staminaController = new StaminaController(ref Player.GetComponent<StaminaModel>().Stamina, Player.GetComponent<StaminaModel>(), inputController, movementController);
-            animController = new AnimController(Player);
-            enemyAttackController = new EnemyAttackController(enemy.GetComponent<TargetDetector>());
+            animController = new AnimController(PlayerAnimator);
 
 
 
@@ -58,7 +53,6 @@ namespace Assets.Scripts.BaseScripts
             AllControllers.Add(movementController);
             AllControllers.Add(staminaController);
             AllControllers.Add(animController);
-            AllControllers.Add(enemyAttackController);
 
             #endregion
         }
