@@ -243,66 +243,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1868640055366812851, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_UiScaleMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 114.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -22.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 199
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050818, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050819, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1868640055513050819, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 609141551784482788, guid: 509c2bf8141196e409c9b31f6d4de443,
-        type: 3}
-      propertyPath: _scaleImage
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 509c2bf8141196e409c9b31f6d4de443, type: 3}
 --- !u!1 &275552190
@@ -747,9 +687,6 @@ MonoBehaviour:
   _moveStatus: {fileID: 0}
   _staminaPercent: 0
   _staminaConst: 100
-  _staminaRunCoast: 0.5
-  _staminaJumpCoast: 30
-  _staminaRegenRate: 0.1
   _MaxStamina: 0
   _stamina: 0
   _isRunning: 0
@@ -931,7 +868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0549289455cd2de4bb51c1a3ad9cbb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <_MaxStamina>k__BackingField: 100
 --- !u!4 &571959040 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7868055929636097972, guid: 0cf395560122d3e4196648d466990415,
