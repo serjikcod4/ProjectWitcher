@@ -13,7 +13,7 @@ namespace Assets.Scripts.Controllers
     {
         private StaminaModel staminaModel;
 
-        private PCInputController InputController;
+        private InputController InputController;
 
         private MovementController movementController;
 
@@ -46,7 +46,7 @@ namespace Assets.Scripts.Controllers
         /// <param name="InputController">Ссылка на контроллер ввода</param>
         /// <param name="movementController">Ссылка на контроллер перемещения</param>
         public StaminaController(ref float Stamina, StaminaModel staminaModel, 
-            PCInputController InputController, MovementController movementController)
+            InputController InputController, MovementController movementController)
         {
             //Получаем ссылки
             this.Stamina =  Stamina;
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Controllers
             RunPress = InputController.Run;
             JumpPress = InputController.Jump;
             RollPress = InputController.Roll;
-            NormalAttackPress = InputController.LeftClick;
+            NormalAttackPress = InputController.LeftClickUP;
             HeavyAttackPress = InputController.HeavyAttackClick;
             IsStanding = movementController.IsStanding;
             IsWalking = movementController.IsWalking;
