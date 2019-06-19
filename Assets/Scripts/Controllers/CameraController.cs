@@ -143,8 +143,6 @@ namespace Assets.Scripts.Controllers
             {
                 Camera.transform.LookAt(Player.transform);
             }
-
-            Debug.Log("Return: " + BackToStandartCameraProsition);
         }
 
         /// <summary>
