@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Controllers
 {
-    class PCInputController : BaseController
+    class InputController : BaseController
     {
 
         #region Модель
@@ -32,13 +32,17 @@ namespace Assets.Scripts.Controllers
 
         public bool Defence { get; private set; }
 
+        public bool CameraCenter { get; private set; }
+
         #endregion
 
         #region Мышь
 
         public bool Aim { get; private set; }
 
-        public bool LeftClick { get; private set; }
+        public bool LeftClickDown { get; private set; }
+
+        public bool LeftClickUp { get; private set; }
 
         public bool HeavyAttackClick { get; private set; }
 
@@ -61,44 +65,15 @@ namespace Assets.Scripts.Controllers
         public bool isLeftClickUp = false;
 
         #endregion
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="PCInputModel">Модель ввода игрока</param>
-        public PCInputController()
+        
+        public InputController()
         {
+            //Временно решение
             PCInputModel = new PCInput();
         }
         
         public override void ControllerUpdate()
         {
-            #region Проверка на Двойной клик ЛКМ
-
-            if (Input.GetMouseButtonUp((int)PCInputModel.LeftMouseButton))
-            {
-                isLeftClickUp = true;
-                countLeftClick++;                
-            }
-
-            if (isLeftClickUp)
-            {
-                countTimer += Time.deltaTime;
-                if(countTimer >= timeToDoubleLeftClick)
-                {
-                    countTimer = 0;
-                    isLeftClickUp = false;
-                    countLeftClick = 0;
-                    HeavyAttackClick = false;
-                }               
-            }
-
-            if (countLeftClick >= 2)
-            {
-                HeavyAttackClick = true;
-            }
-
-            #endregion
 
             ForwardBackward = Input.GetAxis("Horizontal");
 
@@ -106,21 +81,58 @@ namespace Assets.Scripts.Controllers
 
             Jump = Input.GetButton("Jump");
 
-            Run = Input.GetKey(PCInputModel.RunButton);
+            Run = Input.GetButton("Sprint");
 
             RotationY = Input.GetAxis("Mouse X");
 
             RotationX = -Input.GetAxis("Mouse Y");
 
-            Aim = Input.GetMouseButton((int)PCInputModel.AimMouseButton);            
+            Aim = Input.GetButton("AimButton");
 
-            LeftClick = Input.GetMouseButtonDown((int)PCInputModel.LeftMouseButton);
+            LeftClickDown = Input.GetMouseButtonDown((int)PCInputModel.LeftMouseButton);
+
+            LeftClickUp = Input.GetMouseButtonUp((int)PCInputModel.LeftMouseButton);
 
             Zoom = Input.GetAxis("Mouse ScrollWheel");
 
-            Roll = Input.GetKeyDown(PCInputModel.RollButton);
+            Roll = Input.GetButton("Roll");
 
-            Defence = Input.GetKey(PCInputModel.DefenceButton);
+            Defence = Input.GetButton("Block");
+
+            CameraCenter = Input.GetButton("CenterCamera");
+
+            #region Проверка на зажатие левой кнопки мыши для Тяжелой Атаки
+
+
+
+            #endregion
+
+            #region Проверка на Двойной клик ЛКМ для тяжелой атаки
+
+            //if (Input.GetMouseButtonUp((int)PCInputModel.LeftMouseButton))
+            //{
+            //    isLeftClickUp = true;
+            //    countLeftClick++;
+            //}
+
+            //if (isLeftClickUp)
+            //{
+            //    countTimer += Time.deltaTime;
+            //    if (countTimer >= timeToDoubleLeftClick)
+            //    {
+            //        countTimer = 0;
+            //        isLeftClickUp = false;
+            //        countLeftClick = 0;
+            //        HeavyAttackClick = false;
+            //    }
+            //}
+
+            //if (countLeftClick >= 2)
+            //{
+            //    HeavyAttackClick = true;
+            //}
+
+            #endregion
         }
     }
 }
