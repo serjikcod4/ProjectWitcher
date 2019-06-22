@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Controllers
 {
-    class PCInputController : BaseController
+    class InputController : BaseController
     {
 
         #region Модель
@@ -31,6 +31,8 @@ namespace Assets.Scripts.Controllers
         public bool Roll { get; private set; }
 
         public bool Defence { get; private set; }
+
+        public bool CameraCenter { get; private set; }
 
         #endregion
 
@@ -63,32 +65,29 @@ namespace Assets.Scripts.Controllers
         public bool isLeftClickUp = false;
 
         #endregion
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="PCInputModel">Модель ввода игрока</param>
-        public PCInputController()
+        
+        public InputController()
         {
+            //Временно решение
             PCInputModel = new PCInput();
         }
         
         public override void ControllerUpdate()
         {
-           
+
             ForwardBackward = Input.GetAxis("Horizontal");
 
             LeftRight = Input.GetAxis("Vertical");
 
             Jump = Input.GetButton("Jump");
 
-            Run = Input.GetKey(PCInputModel.Sprint);
+            Run = Input.GetButton("Sprint");
 
             RotationY = Input.GetAxis("Mouse X");
 
             RotationX = -Input.GetAxis("Mouse Y");
 
-            Aim = Input.GetMouseButton((int)PCInputModel.AimMouseButton);            
+            Aim = Input.GetButton("AimButton");
 
             LeftClickDown = Input.GetMouseButtonDown((int)PCInputModel.LeftMouseButton);
 
@@ -96,9 +95,11 @@ namespace Assets.Scripts.Controllers
 
             Zoom = Input.GetAxis("Mouse ScrollWheel");
 
-            Roll = Input.GetKeyDown(PCInputModel.Roll);
+            Roll = Input.GetButton("Roll");
 
-            Defence = Input.GetKey(PCInputModel.DefenceButton);
+            Defence = Input.GetButton("Block");
+
+            CameraCenter = Input.GetButton("CenterCamera");
 
             #region Проверка на зажатие левой кнопки мыши для Тяжелой Атаки
 
