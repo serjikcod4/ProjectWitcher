@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DamnedHunter
   m_EditorClassIdentifier: 
   type: Range
-  hp: 100
+  hp: 1000
   speed: 3
   runSpeed: 5
   rangeAttack: 1

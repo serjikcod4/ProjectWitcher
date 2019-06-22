@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Assets.Scripts.BaseScripts;
+using Assets.Scripts.Interfaces;
 
 public class SwordStartModel : MonoBehaviour
 {
@@ -21,6 +22,33 @@ public class SwordStartModel : MonoBehaviour
     //Флаг тяжелой атаки
     private bool isHeavyAttack;
 
+    #region Модификация
+
+    [SerializeField] ItemConditionsChance ItemConditions;
+
+    private void Awake()
+    {
+        if (ItemConditions != null)
+        {
+            ItemConditions.SetItemConditionsChance();
+        }
+    }
+
+    //Метод Передачи статуса
+    private void SetConditions(IGetConditions obj)
+    {
+        //Проверка отсутствия объекта 
+        if (obj != null)
+        {
+            if(ItemConditions.GetCurrentItemConditions().Length != 0)
+            {
+                obj.ApplyCondition(ItemConditions.GetCurrentItemConditions());
+            }
+        }
+    }
+
+    #endregion
+    
     private void OnCollisionEnter(Collision collision)
     {
         //Если коллайдер меча соприкоснулся с игроком то возвращаемся
@@ -31,6 +59,9 @@ public class SwordStartModel : MonoBehaviour
 
         //Вызываем метод Нанесения урона у всех объектов кто наследует интерфейс Нанесения урона
         SetDamage(collision.collider.GetComponent<ISetDamage>());
+
+        //Вызываем метод передачи Статусов оружия
+        SetConditions(collision.collider.GetComponent<IGetConditions>());
     }
 
     //Метод Нанесения урона
@@ -42,7 +73,7 @@ public class SwordStartModel : MonoBehaviour
             obj.ApplyDamage(currentDamage);
         }
     }
-
+    
     //Метод проверки статуса атаки
     private void GetAttackStatus()
     {

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Interfaces;
+using Assets.Scripts.Models.ConditionsAndActions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,7 +11,7 @@ namespace EnemySpace
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(SphereCollider))]
-    public class Enemy : MonoBehaviour, ISetDamage
+    public class Enemy : MonoBehaviour, ISetDamage, IGetConditions
     {
         public delegate void SeeEnemy(string unitName);
         public static event SeeEnemy SeeEvent;
@@ -32,6 +34,10 @@ namespace EnemySpace
         SphereCollider enemyView;
         LineRenderer shootLine;
         GameObject player;
+
+        //
+        [SerializeField] EnemyConditions conditions;
+
         public void EnemyAwake()
         {
             _transform = GetComponent<Transform>();
@@ -51,9 +57,15 @@ namespace EnemySpace
             shootLine = GetComponentInChildren<LineRenderer>();
             player = GameObject.FindGameObjectWithTag("Player");
             enemyView.radius = specification.ViewDistance;
-            controller = new EnemyController(_transform, agent, mesh, headMesh, gun, knife, gunBarrelEnd, rb, enemyBorder, enemyView, shootLine, specification, _transform.position, player, gunShotSound);
+
+            //Создаем коллекцию Состояниями
+            conditions.SetBaseConditions();
+
+            controller = new EnemyController(_transform, agent, mesh, headMesh, gun, knife, gunBarrelEnd, rb, enemyBorder,
+                enemyView, shootLine, specification, _transform.position, player, gunShotSound, conditions);
             controller.EnemyControllerAwake();
         }
+
         public void EnemyUpdate(float deltaTime)
         {
             controller.EnemyControllerUpdate(deltaTime);
@@ -65,12 +77,37 @@ namespace EnemySpace
             {
                 SeeEvent(_transform.name);
             }
-            
         }
 
         public void ApplyDamage(float damage)
         {
             DamageEvent(damage, _transform.name);
+        }
+
+        /// <summary>
+        /// Метод применения состояний к персонажу
+        /// </summary>
+        /// <param name="Characteristics">Массив состояний</param>
+        public void ApplyCondition(params CurrentCondition[] Characteristics)
+        {
+            foreach (var Condition in Characteristics)
+            {
+                if (conditions.Conditions.HasName(Condition.Name))
+                {
+                    ConditionChance(Condition);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Рассчет получения конкретного статуса
+        /// </summary>
+        /// <param name="Condition"></param>
+        private void ConditionChance(CurrentCondition Condition)
+        {
+            //НЕТ РОЛЕВОЙ СИСТЕМЫ!!!
+
+            conditions.Conditions.ChangeConditionStatus(Condition.Name, true);
         }
     }
 }

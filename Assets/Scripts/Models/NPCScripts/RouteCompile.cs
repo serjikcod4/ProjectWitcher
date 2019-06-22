@@ -15,7 +15,7 @@ public class RouteCompile
     public Vector3[] Compile(Vector3 startPosition, float range)
     {
         int length = Random.Range(4, 10);//генерация размера маршрута
-        Debug.Log("Length: " + length);
+        //Debug.Log("Length: " + length);
         Vector3[] route = new Vector3[length];
         for(int i = 0; i < length; i++)
         {
@@ -64,7 +64,7 @@ public class RouteCompile
             route[i] = new Vector3(X, Y, Z);
 
         }
-        Debug.Log("Route created");
+        //Debug.Log("Route created");
         return route;
     }
 }

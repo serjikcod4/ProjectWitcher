@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25871e24b786f714f829f98ea78e23a3, type: 3}
   m_Name: New Enemy Conditions
   m_EditorClassIdentifier: 
-  _BleedingDamage: 1
-  _BleedingTime: 0
+  _BleedingDamage: 0.1
+  _BleedingTime: 3
   _PoisonDamage: 0
   _PoisonTime: 0
   _WeaknessDamageReduce: 0

@@ -10,7 +10,7 @@ namespace EnemySpace
         public string Type { get { return type; } }
 
         [SerializeField] float hp = 0;
-        public float HP { get { return hp; } }
+        internal float HP { get { return hp; } set { hp = value; } }
 
         [SerializeField] float speed = 0;
         public float Speed { get { return speed; } }

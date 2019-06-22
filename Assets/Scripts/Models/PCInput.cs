@@ -1,8 +1,9 @@
-﻿using Assets.Scripts.BaseScripts;
+﻿using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Models
 {
+    [Obsolete("Не рекомендуется")]
     public class PCInput
     {
         public enum MouseButtons

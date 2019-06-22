@@ -89,9 +89,9 @@ namespace Assets.Scripts.Controllers
 
             Aim = Input.GetButton("AimButton");
 
-            LeftClickDown = Input.GetMouseButtonDown((int)PCInputModel.LeftMouseButton);
+            LeftClickDown = Input.GetMouseButtonDown(0);
 
-            LeftClickUp = Input.GetMouseButtonUp((int)PCInputModel.LeftMouseButton);
+            LeftClickUp = Input.GetMouseButtonUp(0);
 
             Zoom = Input.GetAxis("Mouse ScrollWheel");
 

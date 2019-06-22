@@ -70,7 +70,6 @@ GameObject:
   - component: {fileID: 3100970014338540121}
   - component: {fileID: 6429733435374138919}
   - component: {fileID: 3368001791717069087}
-  - component: {fileID: 383493058}
   - component: {fileID: 383493060}
   m_Layer: 8
   m_Name: PaladinGO
@@ -210,20 +209,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!136 &383493058
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3100970014338540118}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &383493060
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5400,7 +5385,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3229001778672601149, guid: f1c2fa75f2504ab4a8a386f7b78f7a0e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f1c2fa75f2504ab4a8a386f7b78f7a0e, type: 3}
 --- !u!4 &7958545548186883021 stripped
 Transform:

@@ -28,6 +28,23 @@ namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
         }
 
         /// <summary>
+        /// Получает текущий статус состояния
+        /// </summary>
+        /// <param name="Name">Название состояния</param>
+        /// <returns></returns>
+        public bool CurrentConditionStatus(string Name)
+        {
+            foreach (var item in Items)
+            {
+                if (item.GetName == Name)
+                {
+                    return item.StatusChanged;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Устанавливает статус состояния по его названию
         /// </summary>
         /// <param name="Name">Название состояния</param>

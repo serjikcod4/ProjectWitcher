@@ -28,7 +28,7 @@ namespace Assets.Scripts.Models
         // Получение урона
         public void TakeDamage(float damage)
         {
-            Debug.Log($"I was hitted for {damage} damage");
+            //Debug.Log($"I was hitted for {damage} damage");
             health -= damage;
             bloodSplash.Play();
             

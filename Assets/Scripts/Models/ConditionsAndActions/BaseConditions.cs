@@ -211,7 +211,15 @@ namespace Assets.Scripts.Models.ConditionsAndActions
                             break;
 
                         case "Bleeding":
-                            ConditionsUpdateEvent += Bleed;
+                            if(!Conditions.CurrentConditionStatus("Bleeding"))
+                            {
+                                ConditionsUpdateEvent += Bleed;
+                            }
+                            else
+                            {
+                                //Cбрасываем таймер продливая эффект статуса
+                                BleedingTimer = 0f;
+                            }
                             break;
 
                         case "KnokedDown":

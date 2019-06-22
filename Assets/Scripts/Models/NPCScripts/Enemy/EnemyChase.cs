@@ -33,6 +33,7 @@ namespace EnemySpace
         public void Chase(GameObject aim, float deltaTime)
         {
             timer += deltaTime;
+
             ///<summary>
             ///определяем дистанцию от центра зоны
             /// </summary>
