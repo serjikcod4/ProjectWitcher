@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
 {
+    /// <summary>
+    /// Представляет коллекцию статусов персонажа
+    /// </summary>
     public class ConditionsCollection : ObservableCollection<Condition>
     {
         /// <summary>

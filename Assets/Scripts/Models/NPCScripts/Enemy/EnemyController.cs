@@ -37,9 +37,6 @@ namespace EnemySpace
         EnemySpecifications spec;
 
         #endregion
-
-
-        
         
         #region Actions
         bool alive; //жив ли враг

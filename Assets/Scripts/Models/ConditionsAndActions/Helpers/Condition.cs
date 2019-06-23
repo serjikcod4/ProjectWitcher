@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
 {
+    /// <summary>
+    /// Представляет отдельный статус персонажа
+    /// </summary>
     public class Condition : IPropertyChanged
     {
         private string Name;
