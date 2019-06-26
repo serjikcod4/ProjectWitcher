@@ -29,8 +29,8 @@ MonoBehaviour:
   patrolDistance: 50
   chasingTime: 15
   Bleeding: 1
-  _BleedingDamage: 0.5
-  _BleedingTime: 5
+  _BleedingDamage: 0.1
+  _BleedingTime: 10
   Poison: 0
   _PoisonDamage: 0
   _PoisonTime: 0
@@ -44,5 +44,5 @@ MonoBehaviour:
   Immobilizing: 0
   _ImmobilizingTime: 0
   Slowing: 1
-  _SlowSpeed: 0.5
-  _SlowingTime: 10
+  _SlowSpeed: 1
+  _SlowingTime: 20

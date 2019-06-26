@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using Assets.Scripts.Interfaces;
+using Assets.Scripts.Models.ConditionsAndActions.Helpers;
 
 namespace EnemySpace
 {
@@ -75,7 +76,7 @@ namespace EnemySpace
         /// <param name="meleeDamage"></param>
         /// <param name="hitSpeed"></param>
         /// <param name="gunShotSound"></param>
-        public EnemyFightController(EnemyMove move, Transform enemyTransform, MeshRenderer gun, MeshRenderer knife, Transform gunBarrelEnd, LineRenderer shootLine, float priorityDistance, float alternativeDistance, float runSpeed, float rangeDamage, float rangeAccuracy, float shootSpeed, float meleeDamage, float hitSpeed, AudioSource gunShotSound)
+        public EnemyFightController(EnemyMove move, Transform enemyTransform, MeshRenderer gun, MeshRenderer knife, Transform gunBarrelEnd, LineRenderer shootLine, float priorityDistance, float alternativeDistance, float rangeDamage, float rangeAccuracy, float shootSpeed, float meleeDamage, float hitSpeed, AudioSource gunShotSound)
         {
             this.move = move;
             this.enemyTransform = enemyTransform;
@@ -84,8 +85,6 @@ namespace EnemySpace
             this.alternativeDistance = alternativeDistance;
             switchDistance = Mathf.Abs(priorityDistance - alternativeDistance) / 2;
             currentAttackDistance = priorityDistance;
-            this.runSpeed = runSpeed;
-            boostSpeed = runSpeed * 2;
             this.rangeDamage = rangeDamage;
             this.rangeAccuracy = rangeAccuracy;
             this.shootSpeed = shootSpeed;
@@ -121,9 +120,9 @@ namespace EnemySpace
                 float distance = Mathf.Sqrt(Mathf.Pow(archrival.transform.position.x - enemyTransform.position.x, 2) + Mathf.Pow(archrival.transform.position.y - enemyTransform.position.y, 2) + Mathf.Pow(archrival.transform.position.z - enemyTransform.position.z, 2));
                 if (distance > currentAttackDistance)
                 {
-                    Debug.Log("MoveToPlayer");
+                    //Debug.Log("MoveToPlayer");
                     move.Continue();
-                    move.Move(archrival.transform.position, runSpeed);
+                    move.Move(archrival.transform.position, Speed.Walk);
                     move.Rotate(RotateDirection(archrival.transform.position));
                     if (timer > 15f)
                     {
@@ -133,18 +132,18 @@ namespace EnemySpace
                     {
                         gun.enabled = true;
                         knife.enabled = false;
-                        Debug.Log("MoveToPlayer");
+                        //Debug.Log("MoveToPlayer");
                         move.Continue();
-                        move.Move(archrival.transform.position, runSpeed);
+                        move.Move(archrival.transform.position, Speed.Run);
                         move.Rotate(RotateDirection(archrival.transform.position));
                     }
                     else
                     {
                         gun.enabled = false;
                         knife.enabled = true;
-                        Debug.Log("ThrowToPlayer");
+                        //Debug.Log("ThrowToPlayer");
                         move.Continue();
-                        move.Move(archrival.transform.position, boostSpeed);
+                        move.Move(archrival.transform.position, Speed.Throw);
                         move.Rotate(RotateDirection(archrival.transform.position));
                         if (distance >= switchDistance)
                         {
@@ -233,7 +232,7 @@ namespace EnemySpace
             {
                 int variant = Random.Range(-1, 1);
                 currentDirection = new Vector3(shootDirection.x + variant, shootDirection.y, shootDirection.z + variant); ;
-                Debug.LogWarning("ShotInPlayer");
+                //Debug.LogWarning("ShotInPlayer");
                 hitChance--;
             }
             else
@@ -243,7 +242,7 @@ namespace EnemySpace
                 if (sideMiss == 0)
                     miss = -miss;
                 currentDirection = new Vector3(shootDirection.x + miss, shootDirection.y, shootDirection.z + miss);
-                Debug.LogWarning("MissShot");
+                //Debug.LogWarning("MissShot");
                 missChance--;
             }
             return currentDirection;
@@ -255,8 +254,8 @@ namespace EnemySpace
         /// <param name="archrival"></param>
         private void RangeAttack(Vector3 archrival)
         {
-            Debug.Log("ShotCount: " + shotCount);
-            Debug.Log("HitCount: " + hitCount);
+            //Debug.Log("ShotCount: " + shotCount);
+            //Debug.Log("HitCount: " + hitCount);
             timer = 0f;
             gunShotSound.Play();
             float currentDamage = rangeDamage;
@@ -268,12 +267,12 @@ namespace EnemySpace
             shotCount++;
             shootRay.origin = gunBarrelEnd.position;
             shootRay.direction = archrival;
-            Debug.Log(shootRay);
+            //Debug.Log(shootRay);
 
             if (Physics.Raycast(shootRay, out hit, 100f))
             {
                 hitCount++;
-                Debug.LogError("Hit: " + hit.collider.name);
+                //Debug.LogError("Hit: " + hit.collider.name);
                 SetDamage(hit.collider.GetComponent<IDamageable>(), currentDamage);
             }
         }
@@ -304,7 +303,7 @@ namespace EnemySpace
         {
             if(obj != null)
             {
-                Debug.Log("Damage: " + damage);
+                //Debug.Log("Damage: " + damage);
                 obj.TakeDamage(damage);
             }
         }
@@ -326,7 +325,7 @@ namespace EnemySpace
         /// <param name="archrival"></param>
         private void SpecialAbility(Vector3 archrival)
         {
-            Debug.Log("Special");
+            //Debug.Log("Special");
             switchMode = true;
             currentAttackDistance = priorityDistance;
             gun.enabled = true;
@@ -336,7 +335,7 @@ namespace EnemySpace
             Vector3 distancePointDirection = new Vector3(enemyTransform.position.x - delta.x * priorityDistance, enemyTransform.position.y - delta.y, enemyTransform.position.z - delta.z * priorityDistance);
             Vector3 distancePoint = new Vector3(distancePointDirection.x, distancePointDirection.y, distancePointDirection.z);
             move.Continue();
-            move.Move(distancePoint, boostSpeed);
+            move.Move(distancePoint, Speed.Throw);
             //enemyTransform.Translate(distancePoint);
             float distance = Mathf.Sqrt(Mathf.Pow(archrival.x - enemyTransform.position.x, 2) + Mathf.Pow(archrival.y - enemyTransform.position.y, 2) + Mathf.Pow(archrival.z - enemyTransform.position.z, 2));
             if (distance >= switchDistance)
@@ -345,7 +344,7 @@ namespace EnemySpace
                 meleeHitCount = 0;
                 move.Stop();
                 move.Rotate(RotateDirection(archrival));
-                Debug.LogError("FinishAbility");
+                //Debug.LogError("FinishAbility");
             }
         }
     }

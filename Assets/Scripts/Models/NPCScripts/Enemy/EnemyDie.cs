@@ -50,7 +50,7 @@ namespace EnemySpace
             }
             else
             {
-                Debug.Log("invis");
+                //Debug.Log("invis");
                 DieEvent(enemyTransform.name);
                 animStarted = false;
             }
