@@ -10,13 +10,31 @@ using UnityEngine;
 
 namespace Assets.Scripts.Models.ConditionsAndActions
 {
-    public abstract class BaseConditions: ScriptableObject
+    /// <summary>
+    /// Содержит информацию о доступных персонажу статусах и отслеживает их выполнение
+    /// </summary>
+    public class BaseConditions
     {
         /// <summary>
         /// Коллекция содержащая все доступные персонажу статусы
         /// </summary>
         public ConditionsCollection Conditions { get; private set; }
 
+        /// <summary>
+        /// Содержит все характеристики состояний персонажа
+        /// </summary>
+        private CharacterConditionsSpecifications ConditionsSpecifications;
+
+        /// <summary>
+        /// Содержит все методы состояний
+        /// </summary>
+        private Dictionary<string, ConditionsUpdate> ConditionsMethods;
+
+        /// <summary>
+        /// Содержит таймеры для всех состояний
+        /// </summary>
+        private Dictionary<string, float> ConditionTimers;
+        
         #region События
 
         /// <summary>
@@ -43,133 +61,129 @@ namespace Assets.Scripts.Models.ConditionsAndActions
         }
 
         #endregion
-        
-        #region Параметры состояний
-
-        [Header("Состояния наносящие урон здоровью")]
-        [Tooltip("Урон от Кровотечение")]
-        [SerializeField] private float _BleedingDamage = 0f;
-        public float BleedingDamage { get { return _BleedingDamage; } }
-
-        [Tooltip("Время Кровотечение")]
-        [SerializeField] private float _BleedingTime = 0f;
-        public float BleedingTime { get { return _BleedingTime; } }
-
-        [Tooltip("Урон от Отравления")]
-        [SerializeField] private float _PoisonDamage = 0f;
-        public float PoisonDamage { get { return _PoisonDamage; } }
-
-        [Tooltip("Время Отравления")]
-        [SerializeField] private float _PoisonTime = 0f;
-        public float PoisonTime { get { return _PoisonTime; } }
-
-        [Header("Состояния уменьшающие урон")]
-        [Tooltip("Процент уменьшения физического урон от Ослабления")]
-        [SerializeField, Range(0f, 1f)] float _WeaknessDamageReduce = 0f;
-        public float WeaknessDamageReduce { get { return _WeaknessDamageReduce; } }
-
-        [Tooltip("Время ослабления")]
-        [SerializeField] float _WeaknessTime = 0f;
-        public float WeaknessTime { get { return _WeaknessTime; } }
-
-        [Header("Состояния контроля")]
-        [Tooltip("Время Нокдауна")]
-        [SerializeField] float _KnokedDownTime = 0f;
-        public float KnokedDownTime { get { return _KnokedDownTime; } }
-
-        [Tooltip("Время Ослепления")]
-        [SerializeField] float _BlindingTime = 0f;
-        public float BlindingTime { get { return _BlindingTime; } }
-
-        [Tooltip("Время Иммобилизации")]
-        [SerializeField] float _ImmobilizingTime = 0f;
-        public float ImmobilizingTime { get { return _ImmobilizingTime; } }
-
-        [Tooltip("Время Замедления")]
-        [SerializeField] float _SlowingTime = 0f;
-        public float SlowingTime { get { return _SlowingTime; } }
-
-        #endregion
 
         #region Таймеры
 
-        protected internal float BleedingTimer = 0f;
-        private float PoisonTimer = 0f;
-        private float WeaknessTimer = 0f;
-        private float KnokedDownTimer = 0f;
-        private float BlindingTimer = 0f;
-        private float ImmobilizingTimer = 0f;
+        private float BleedingTimer = 0f;
         private float SlowingTimer = 0f;
 
         #endregion
 
-        /// <summary>
-        /// Добавляем состояния в коллекцию
-        /// </summary>
-        public virtual void SetBaseConditions()
+        public BaseConditions(List<string> ConditionsList, CharacterConditionsSpecifications ConditionsSpecifications)
         {
-            #region Добавляем все состояния.
-            
-            Conditions = new ConditionsCollection()
-            {
-                new Condition("Alive", true),
-                new Condition("Slowed", false),
-                new Condition("Immobilized", false),
-                new Condition("Blinded", false),
-                new Condition("Bleeding", false),
-                new Condition("KnokedDown", false),
-                new Condition("Stunned", false),
-                new Condition("Poisoned", false),
-                new Condition("Weak", false),
+            #region Добавляем все состояния в коллекцию
 
+            Conditions = new ConditionsCollection(ConditionsList)
+            {
+                new Condition("Alive", true)
             };
 
             Conditions.SetPropertyEventMethod(ConditionStatusHasChanged);
 
             #endregion
+
+            //Получаем ссылку на характеристики состояний
+            this.ConditionsSpecifications = ConditionsSpecifications;
+
+            #region Заполняем словарь с методами состояний
+
+            ConditionsMethods = new Dictionary<string, ConditionsUpdate>();
+
+            ConditionsMethods.Add("Bleeding", Bleed);
+            ConditionsMethods.Add("Slowed", Slowing);
+
+
+            #endregion
+
+            #region Заполняем словарь с таймерами
+
+            ConditionTimers = new Dictionary<string, float>();
+
+            ConditionTimers.Add("Bleeding", BleedingTimer);
+            ConditionTimers.Add("Slowed", SlowingTimer);
+
+            #endregion
         }
-        
+
         #region Логика Состояний
 
-        public virtual void Slowing(ref EnemySpecifications spec, float deltaTime)
+        /// <summary>
+        /// Кровотечение
+        /// </summary>
+        /// <param name="CharacterModel">Модель персонажа</param>
+        /// <param name="deltaTime">Время</param>
+        public void Bleed(ref BaseCharacterModel CharacterModel, ref EnemySpecifications enemySpecifications, float deltaTime)
         {
+            ConditionTimers["Bleeding"] += deltaTime;
+            CharacterModel.Health -= ConditionsSpecifications.BleedingDamage;
 
+            Debug.Log($"!!!BLEED!!! Health:{CharacterModel.Health.ToString("0")} Condition Time Left: {(ConditionsSpecifications.BleedingTime - ConditionTimers["Bleeding"]).ToString("0.0")}");
+
+            if(ConditionTimers["Bleeding"] >= ConditionsSpecifications.BleedingTime)
+            {
+                ConditionTimers["Bleeding"] = 0;
+                Conditions.ChangeConditionStatus("Bleeding", false);
+                ConditionsUpdateEvent -= Bleed;
+            }
         }
 
-        public virtual void Immobilizing(ref EnemySpecifications spec, float deltaTime)
+        /// <summary>
+        /// Замедление
+        /// </summary>
+        /// <param name="CharacterModel">Модель персонажа</param>
+        /// <param name="deltaTime">Время</param>
+        public void Slowing(ref BaseCharacterModel CharacterModel, ref EnemySpecifications enemySpecifications, float deltaTime)
         {
+            ConditionTimers["Slowed"] += deltaTime;
+            CharacterModel.Speed = ConditionsSpecifications.SlowSpeed;
+            CharacterModel.RunSpeed = ConditionsSpecifications.SlowSpeed;
 
+            Debug.Log($"!!!SLOW!!! Condition Time Left: {(ConditionsSpecifications.SlowingTime - ConditionTimers["Slowed"]).ToString("0.0")}");
+
+            if (ConditionTimers["Slowed"] >= ConditionsSpecifications.SlowingTime)
+            {
+                ConditionTimers["Slowed"] = 0;
+                Conditions.ChangeConditionStatus("Slowed", false);
+                ConditionsUpdateEvent -= Slowing;
+
+                CharacterModel.Speed = enemySpecifications.Speed;
+                CharacterModel.RunSpeed = enemySpecifications.RunSpeed;
+            }
         }
 
-        public virtual void Blinding(ref EnemySpecifications spec, float deltaTime)
-        {
+        #region TO DO 
 
-        }
+        //public void Immobilizing(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
 
-        public virtual void Bleed(ref EnemySpecifications spec, float deltaTime)
-        {
+        //}
 
-        }
+        //public void Blinding(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
+
+        //}
         
-        public virtual void KnokingDown(ref EnemySpecifications spec, float deltaTime)
-        {
+        //public void KnokingDown(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
 
-        }
+        //}
 
-        public virtual void Stuning(ref EnemySpecifications spec, float deltaTime)
-        {
+        //public void Stuning(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
 
-        }
+        //}
 
-        public virtual void Poison(ref EnemySpecifications spec, float deltaTime)
-        {
+        //public void Poison(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
 
-        }
+        //}
 
-        public virtual void Weak(ref EnemySpecifications spec, float deltaTime)
-        {
+        //public void Weak(ref BaseCharacterModel CharacterModel, float deltaTime)
+        //{
 
-        }
+        //}
+
+        #endregion
 
         #endregion
 
@@ -191,52 +205,19 @@ namespace Assets.Scripts.Models.ConditionsAndActions
             {
                 if(Args.ConditionStatus == false)
                 {
+                    ActiveConditionsCheck();
                     return;
                 }
 
                 else
                 {
-                    switch (Args.ConditionName)
+                    if(!Conditions.CurrentConditionStatus(Args.ConditionName))
                     {
-                        case "Slowed":
-                            ConditionsUpdateEvent += Slowing;
-                            break;
-
-                        case "Immobilized":
-                            ConditionsUpdateEvent += Immobilizing;
-                            break;
-
-                        case "Blinded":
-                            ConditionsUpdateEvent += Blinding;
-                            break;
-
-                        case "Bleeding":
-                            if(!Conditions.CurrentConditionStatus("Bleeding"))
-                            {
-                                ConditionsUpdateEvent += Bleed;
-                            }
-                            else
-                            {
-                                //Cбрасываем таймер продливая эффект статуса
-                                BleedingTimer = 0f;
-                            }
-                            break;
-
-                        case "KnokedDown":
-                            ConditionsUpdateEvent += KnokingDown;
-                            break;
-
-                        case "Stunned":
-                            ConditionsUpdateEvent += Stuning;
-                            break;
-
-                        case "Poisoned":
-                            ConditionsUpdateEvent += Poison;
-                            break;
-
-                        case "Weak":
-                            ConditionsUpdateEvent += Weak;
-                            break;
+                        ConditionsUpdateEvent += ConditionsMethods[Args.ConditionName];
+                    }
+                    else
+                    {
+                        ConditionTimers[Args.ConditionName] = 0;
                     }
 
                     ActiveConditionsCheck();
@@ -289,9 +270,9 @@ namespace Assets.Scripts.Models.ConditionsAndActions
         /// </summary>
         /// <param name="spec">Модель данных противника</param>
         /// <param name="deltaTime">Время</param>
-        public void ConditionsUpdateStart(ref EnemySpecifications spec, float deltaTime)
+        public void ConditionsUpdateStart(ref BaseCharacterModel CharacterModel, ref EnemySpecifications enemySpecifications, float deltaTime)
         {
-            ConditionsUpdateEvent?.Invoke(ref spec, deltaTime);
+            ConditionsUpdateEvent?.Invoke(ref CharacterModel, ref enemySpecifications, deltaTime);
         }
 
         #endregion

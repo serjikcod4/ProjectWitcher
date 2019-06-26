@@ -14,6 +14,26 @@ namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
     public class ConditionsCollection : ObservableCollection<Condition>
     {
         /// <summary>
+        /// Создает коллекцию состояний персонажа
+        /// </summary>
+        public ConditionsCollection()
+        {
+
+        }
+
+        /// <summary>
+        /// Создает коллекцию состояний персонажа и заполняет нужными статусами
+        /// </summary>
+        /// <param name="ConditionsList">Список статусов</param>
+        public ConditionsCollection(List<string> ConditionsList)
+        {
+            foreach (var item in ConditionsList)
+            {
+                Add(new Condition(item, false));
+            }
+        }
+
+        /// <summary>
         /// Проверяет есть ли указанное Состояние в коллекции по названию
         /// </summary>
         /// <param name="Name">Название состояния</param>

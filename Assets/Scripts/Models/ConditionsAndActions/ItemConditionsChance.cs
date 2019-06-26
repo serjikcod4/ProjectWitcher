@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Assets.Scripts.Interfaces
 {
+    /// <summary>
+    /// Содержит данные о статусе который может передать объект и шансах его срабатывания
+    /// </summary>
     public struct CurrentCondition
     {
         public string Name { get; private set; }
@@ -17,6 +20,9 @@ namespace Assets.Scripts.Interfaces
         }
     }
 
+    /// <summary>
+    /// Содержит данные всех статусах, которые может передать объект и шансах их срабатывания
+    /// </summary>
     [CreateAssetMenu]
     public class ItemConditionsChance : ScriptableObject
     {
@@ -29,7 +35,6 @@ namespace Assets.Scripts.Interfaces
         [SerializeField, Range(0f, 1f)] float Blinded = 0f;
         [SerializeField, Range(0f, 1f)] float Bleeding = 0f;
         [SerializeField, Range(0f, 1f)] float KnokedDown = 0f;
-        [SerializeField, Range(0f, 1f)] float Stunned = 0f;
         [SerializeField, Range(0f, 1f)] float Poisoned = 0f;
         [SerializeField, Range(0f, 1f)] float Weak = 0f;
 
@@ -37,19 +42,23 @@ namespace Assets.Scripts.Interfaces
         
         public void SetItemConditionsChance()
         {
-            ItemConditions = new CurrentCondition[]{
-
-                new CurrentCondition("Slowed", Slow),
-                new CurrentCondition("Immobilized", Immobilized),
-                new CurrentCondition("Blinded", Blinded),
+            ItemConditions = new CurrentCondition[]
+            {
                 new CurrentCondition("Bleeding", Bleeding),
-                new CurrentCondition("KnokedDown", KnokedDown),
-                new CurrentCondition("Stunned", Stunned),
                 new CurrentCondition("Poisoned", Poisoned),
-                new CurrentCondition("Weak", Weak),
+                new CurrentCondition("Weakness", Weak),
+                new CurrentCondition("KnokedDown", KnokedDown),
+                new CurrentCondition("Blinded", Blinded),
+                new CurrentCondition("Immobilized", Immobilized),
+                new CurrentCondition("Slowed", Slow),
+                
             };
         }
 
+        /// <summary>
+        /// Получить все активные статусы на объекте
+        /// </summary>
+        /// <returns></returns>
         public CurrentCondition[] GetCurrentItemConditions()
         {
             return (from Con in ItemConditions where Con.Chance != 0 select Con).ToArray();

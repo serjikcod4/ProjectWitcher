@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine.AI;
 using Assets.Scripts.Models.ConditionsAndActions;
+using Assets.Scripts.Models.ConditionsAndActions.Helpers;
 
 namespace EnemySpace
 {
@@ -24,6 +25,8 @@ namespace EnemySpace
         //float meleeDamage;
         //float hitSpeed;
 
+        private BaseCharacterModel CharacterModel;
+
         private readonly float MaximumHP;
 
         Vector3 homePoint; //стартовая позиция для генерации зоны патрулирования
@@ -31,6 +34,9 @@ namespace EnemySpace
         float timer = 0f;
 
         #endregion
+
+        public delegate void HealthCheck();
+        public event HealthCheck CheckHealth;
 
         #region Specification
 
@@ -94,14 +100,14 @@ namespace EnemySpace
         //NEW
         #region Состояния
 
-        EnemyConditions conditions;
+        BaseConditions conditions;
 
         #endregion
 
         public EnemyController(Transform enemyTransform, NavMeshAgent agent, MeshRenderer mesh, MeshRenderer headMesh, 
             MeshRenderer gun, MeshRenderer knife, Transform gunBarrelEnd, Rigidbody rb, CapsuleCollider enemyBorder, 
             SphereCollider enemyView, LineRenderer shootLine, EnemySpecifications spec, Vector3 homePoint, 
-            GameObject player, AudioSource gunShotSound, EnemyConditions conditions)
+            GameObject player, AudioSource gunShotSound, BaseConditions conditions)
         {
             this.enemyTransform = enemyTransform;
             this.agent = agent;
@@ -143,9 +149,11 @@ namespace EnemySpace
             MaximumHP = spec.HP;
 
             this.conditions = conditions;
-            
+
+            CharacterModel = new BaseCharacterModel(spec.HP, spec.Speed, spec.RunSpeed);
+
             #endregion
-            
+
         }
 
         public void EnemyControllerAwake()
@@ -159,25 +167,25 @@ namespace EnemySpace
 
             RouteGenerator = new RouteCompile();
             Dying = new EnemyDie(enemyTransform);
-            Move = new EnemyMove(agent, spec.Speed, rb);
+            Move = new EnemyMove(agent, CharacterModel, rb);
             if(spec.Type == "Range")
             {
-                Chasing = new EnemyChase(Move, enemyTransform, spec.RunSpeed, spec.ChasingTime, spec.RangeDistance);
+                Chasing = new EnemyChase(Move, enemyTransform, spec.ChasingTime, spec.RangeDistance);
             }
             else if(spec.Type == "Melee")
             {
-                Chasing = new EnemyChase(Move, enemyTransform, spec.RunSpeed, spec.ChasingTime, spec.MeleeDistance);
+                Chasing = new EnemyChase(Move, enemyTransform, spec.ChasingTime, spec.MeleeDistance);
             }           
             Patroling = new EnemyPatrolController(Move, enemyTransform);
             Idle = new EnemyIdleController(enemyTransform);
             ComingHome = new EnemyComingHome(Move, enemyTransform, homePoint);
             if(spec.Type == "Range")
             {
-                Fight = new EnemyFightController(Move, enemyTransform, gun, knife, gunBarrelEnd, shootLine, spec.RangeDistance, spec.MeleeDistance, spec.RunSpeed, spec.RangeDamage, spec.RangeAccuracy, spec.ShootSpeed, spec.MeleeDamage, spec.HitSpeed,  gunShotSound);
+                Fight = new EnemyFightController(Move, enemyTransform, gun, knife, gunBarrelEnd, shootLine, spec.RangeDistance, spec.MeleeDistance, spec.RangeDamage, spec.RangeAccuracy, spec.ShootSpeed, spec.MeleeDamage, spec.HitSpeed,  gunShotSound);
             }
             if (spec.Type == "Melee")
             {
-                Fight = new EnemyFightController(Move, enemyTransform, gun, knife, gunBarrelEnd, shootLine, spec.RangeDistance, spec.MeleeDistance, spec.RunSpeed, spec.RangeDamage, spec.RangeAccuracy, spec.ShootSpeed, spec.MeleeDamage, spec.HitSpeed, gunShotSound);
+                Fight = new EnemyFightController(Move, enemyTransform, gun, knife, gunBarrelEnd, shootLine, spec.RangeDistance, spec.MeleeDistance, spec.RangeDamage, spec.RangeAccuracy, spec.ShootSpeed, spec.MeleeDamage, spec.HitSpeed, gunShotSound);
             }
             Hurt = new EnemyHurt(headMesh);
 
@@ -192,6 +200,7 @@ namespace EnemySpace
             Enemy.DamageEvent += TakeDamage;
             EnemyComingHome.ComingHomeEvent += AtHome;
             EnemyFightController.AttackToChaseEvent += AttackModeOff;
+            CheckHealth += CharacterHealthCheck;
 
         }
 
@@ -201,7 +210,8 @@ namespace EnemySpace
             {
                 if (conditions.HasActiveConditions)
                 {
-                    conditions.ConditionsUpdateStart(ref spec, deltaTime);
+                    CheckHealth.Invoke();
+                    conditions.ConditionsUpdateStart(ref Move.CharacterModel, ref spec, deltaTime);
                 }
                 
                 ///<summary>
@@ -330,20 +340,24 @@ namespace EnemySpace
         {
             if(enemyTransform.name == unitName)
             {
-                if (spec.HP > dmg)
+                if (CharacterModel.Health > dmg & CharacterModel.Health > 0)
                 {
-                    spec.HP -= dmg;
-                    float lifePercent = spec.HP / MaximumHP * 100;
+                    CharacterModel.Health -= dmg;
+                    float lifePercent = CharacterModel.Health / MaximumHP * 100;
                     Hurt.Hurt(lifePercent);
                 }
                 else
                 {
-                    spec.HP = 0;
+                    CharacterModel.Health = 0;
                     alive = false;
                 }
             }
         }
-        #endregion
 
+        private void CharacterHealthCheck()
+        {
+            alive = CharacterModel.Health > 0 ? true : false;
+        }
+        #endregion
     }
 }

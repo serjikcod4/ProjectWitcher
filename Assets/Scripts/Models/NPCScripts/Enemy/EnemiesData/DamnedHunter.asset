@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DamnedHunter
   m_EditorClassIdentifier: 
   type: Range
-  hp: 1000
+  hp: 250
   speed: 3
   runSpeed: 5
-  rangeAttack: 1
+  rangeAttack: 0
   rangeDamage: 20
   rangeDistance: 25
   rangeAccuracy: 8
@@ -28,3 +28,21 @@ MonoBehaviour:
   viewDistance: 30
   patrolDistance: 50
   chasingTime: 15
+  Bleeding: 1
+  _BleedingDamage: 0.5
+  _BleedingTime: 5
+  Poison: 0
+  _PoisonDamage: 0
+  _PoisonTime: 0
+  Weakness: 0
+  _WeaknessDamageReduce: 0
+  _WeaknessTime: 0
+  KnokedDown: 0
+  _KnokedDownTime: 0
+  Blinding: 0
+  _BlindingTime: 0
+  Immobilizing: 0
+  _ImmobilizingTime: 0
+  Slowing: 1
+  _SlowSpeed: 0.5
+  _SlowingTime: 10

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
 {
+    /// <summary>
+    /// Базовая модель персонажа
+    /// </summary>
     public struct BaseCharacterModel
     {
         public float Health;

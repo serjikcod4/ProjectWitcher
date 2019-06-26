@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Interfaces;
 using Assets.Scripts.Models.ConditionsAndActions;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Models.ConditionsAndActions.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +16,7 @@ namespace EnemySpace
         public static event SeeEnemy SeeEvent;
         public delegate void TakeDamage(float dmg, string unitName);
         public static event TakeDamage DamageEvent;
+        
 
         EnemyController controller;
         [SerializeField] EnemySpecifications specification;
@@ -34,9 +34,8 @@ namespace EnemySpace
         SphereCollider enemyView;
         LineRenderer shootLine;
         GameObject player;
-
-        //
-        [SerializeField] EnemyConditions conditions;
+        
+        BaseConditions conditions;
 
         public void EnemyAwake()
         {
@@ -58,8 +57,7 @@ namespace EnemySpace
             player = GameObject.FindGameObjectWithTag("Player");
             enemyView.radius = specification.ViewDistance;
 
-            //Создаем коллекцию Состояниями
-            conditions.SetBaseConditions();
+            conditions = new BaseConditions(specification.GetCharacterConditionsList(), new CharacterConditionsSpecifications(specification));
 
             controller = new EnemyController(_transform, agent, mesh, headMesh, gun, knife, gunBarrelEnd, rb, enemyBorder,
                 enemyView, shootLine, specification, _transform.position, player, gunShotSound, conditions);

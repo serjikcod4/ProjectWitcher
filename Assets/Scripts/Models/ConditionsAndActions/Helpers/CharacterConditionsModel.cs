@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
 {
+    /// <summary>
+    /// Содержит данные о характеристиках статусов персонажа
+    /// </summary>
     public struct CharacterConditionsSpecifications
     {
         public float BleedingDamage { get; private set; }
@@ -19,7 +22,12 @@ namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
         public float BlindingTime { get; private set; }
         public float ImmobilizingTime { get; private set; }
         public float SlowingTime { get; private set; }
+        public float SlowSpeed { get; private set; }
 
+        /// <summary>
+        /// Создает модель данных о характеристиках персонажа
+        /// </summary>
+        /// <param name="Specifications">Все данные о персонаже</param>
         public CharacterConditionsSpecifications(EnemySpecifications Specifications)
         {
             BleedingDamage = Specifications.BleedingDamage;
@@ -32,6 +40,7 @@ namespace Assets.Scripts.Models.ConditionsAndActions.Helpers
             BlindingTime = Specifications.BlindingTime;
             ImmobilizingTime = Specifications.ImmobilizingTime;
             SlowingTime = Specifications.SlowingTime;
+            SlowSpeed = Specifications.SlowSpeed;
         }
     }
 }
