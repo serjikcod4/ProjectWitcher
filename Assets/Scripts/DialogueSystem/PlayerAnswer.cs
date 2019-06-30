@@ -4,11 +4,13 @@ using UnityEngine;
 namespace Assets.Scripts.DialogueSystem
 
 {
-    public class PlayerAnswer : MonoBehaviour
+    [System.Serializable]
+    public class PlayerAnswer
     {
 
-        private string _text;
-        private int ToNode;
+        public string _text;
+        public int _toNode;
+        public bool _endDialogue;
 
 
     }

@@ -15,6 +15,8 @@ namespace Assets.Scripts.DialogueSystem
         private Text _text;
         public bool _startDialogFlag { get; private set; }
         public bool _dialogAreaEnter { get; private set; }
+        public string _NpcText { get; private set; }
+
 
         DialogueSystem dialogueSystem;
         
@@ -26,11 +28,14 @@ namespace Assets.Scripts.DialogueSystem
             _text = gameObject.GetComponentInChildren<Canvas>().GetComponentInChildren<Text>();
 
             dialogueSystem = FindObjectOfType<DialogueSystem>();
+
+            _NpcText = "Text for NPC №1, bla bla bla bla!";
         }
         void Start()
         {
             _dialogPanel.SetActive(false);
             _text.text = "\"E\" Начать диалог";
+            dialogueSystem._npcStartText = _NpcText;
         }
 
 

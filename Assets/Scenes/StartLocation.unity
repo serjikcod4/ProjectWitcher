@@ -1936,12 +1936,24 @@ MonoBehaviour:
   _dialogueCanvas: {fileID: 0}
   _dialoguePanel: {fileID: 0}
   _dialogueNPCText: {fileID: 0}
-  _dialoguePlayerAnswers: []
+  _AnswerButtons: []
   _currentNPC: {fileID: 0}
-  _showDialogue: 0
-  dialogues:
-  - {fileID: 0}
-  - {fileID: 0}
+  _npcStartText: 
+  _currentNode: 0
+  dialogueNode:
+  - _npcText: "\u041F\u0440\u0438\u0432\u0435\u0442 \u043D\u043F\u0441"
+    _dialoguePlayerAnswers:
+    - _text: "\u041F\u0440\u0438\u0432\u0435\u0442 \u0433\u0433"
+      _toNode: 2
+      _endDialogue: 0
+    - _text: "\u041F\u043E\u043A\u0430 \u0433\u0433"
+      _toNode: 2
+      _endDialogue: 1
+  - _npcText: "\u041F\u043E\u043A\u0430 \u043D\u043F\u0441"
+    _dialoguePlayerAnswers:
+    - _text: "\u0418 \u0442\u0435\u0431\u0435 \u043F\u043E\u043A\u0430! \u0433\u0433"
+      _toNode: 0
+      _endDialogue: 1
 --- !u!1 &1156021247
 GameObject:
   m_ObjectHideFlags: 0

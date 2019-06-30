@@ -4,11 +4,12 @@ using UnityEngine;
 namespace Assets.Scripts.DialogueSystem
 {
     [System.Serializable]
-    public class Dialogue : MonoBehaviour
+    public class Dialogue
     {
-        
         public string _npcText;
-       
-       
+
+        public PlayerAnswer[] _dialoguePlayerAnswers;
     }
+
+    
 }
