@@ -46,6 +46,10 @@ namespace Assets.Scripts.DialogueSystem
         void Start()
         {
             _dialogueCanvas.enabled = false;
+            foreach (Button b in _AnswerButtons)
+            {
+                b.gameObject.SetActive(false);
+            }
         }
 
 
@@ -54,16 +58,25 @@ namespace Assets.Scripts.DialogueSystem
         void Update()
         {
             DialogueUpdate();
+            
         }
 
-
+        public void DialogueAnswerClear()
+        {
+            foreach (Button b in _AnswerButtons)
+            {
+                b.gameObject.SetActive(false);
+            }
+        }
         private void DialogueUpdate()
         {
             _dialogueNPCText.text = dialogueNode[_currentNode]._npcText;
             for (int i = 0; i < dialogueNode[_currentNode]._dialoguePlayerAnswers.Length; i++)
             {
+                _AnswerButtons[i].gameObject.SetActive(true);
                 _AnswerButtons[i].GetComponentInChildren<Text>().name = dialogueNode[_currentNode]._dialoguePlayerAnswers[i]._text;
                 _AnswerButtons[i].GetComponentInChildren<Text>().text = dialogueNode[_currentNode]._dialoguePlayerAnswers[i]._text;
+                
             }
         }
     }

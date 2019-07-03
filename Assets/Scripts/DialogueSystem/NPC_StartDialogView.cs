@@ -29,7 +29,6 @@ namespace Assets.Scripts.DialogueSystem
 
             dialogueSystem = FindObjectOfType<DialogueSystem>();
 
-            _NpcText = "Text for NPC №1, bla bla bla bla!";
         }
         void Start()
         {
@@ -54,6 +53,7 @@ namespace Assets.Scripts.DialogueSystem
             {
                 _startDialogFlag = false;
                 dialogueSystem.gameObject.GetComponentInChildren<Canvas>().enabled = false;
+                dialogueSystem._currentNode = 0;
                 
             }
 
